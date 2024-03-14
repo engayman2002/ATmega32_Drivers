@@ -4,7 +4,7 @@ My ATmega32 MCAL Layer.
 
 I am happy to share my work with you.
 
-## DIO/GPTO Driver
+## DIO/GPIO Driver
 I wrote many funcitons for this driver:
 
 #### For PIN or PORT or Low Nibble or High Nibble:
