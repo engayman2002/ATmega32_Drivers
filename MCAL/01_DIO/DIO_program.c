@@ -13,6 +13,16 @@
 #include "DIO_interface.h"
 #include "DIO_private.h"
 
+// ---------------------- Enable and Disable PullUp ----------------------
+DIO_Error_Status     DIO_enum_EnablePullUp       ()
+{
+    CLR_BIT(SFIOR,2);
+}
+DIO_Error_Status     DIO_enum_DisablePullUP      ()
+{
+    SET_BIT(SFIOR,2);
+}
+
 // ---------------------- Functions for Specific Bit in Port ----------------------
 
 DIO_Error_Status     DIO_enum_SetPinDirection    (uint8_t Copy_PORT,uint8_t Copy_PIN,uint8_t Copy_Direction)
@@ -31,18 +41,34 @@ DIO_Error_Status     DIO_enum_SetPinDirection    (uint8_t Copy_PORT,uint8_t Copy
     {
     case DIO_PORTA:
         Copy_Direction==DIO_PIN_OUTPUT ? SET_BIT(DDRA,Copy_PIN) : CLR_BIT(DDRA,Copy_PIN);
+        if(Copy_Direction==DIO_PIN_INPUT)
+        {
+            CLR_BIT(PORTA,Copy_PIN);
+        }
         break;
 
     case DIO_PORTB:
         Copy_Direction==DIO_PIN_OUTPUT ? SET_BIT(DDRB,Copy_PIN) : CLR_BIT(DDRB,Copy_PIN);
+        if(Copy_Direction==DIO_PIN_INPUT)
+        {
+            CLR_BIT(PORTB,Copy_PIN);
+        }
         break;
 
     case DIO_PORTC:
         Copy_Direction==DIO_PIN_OUTPUT ? SET_BIT(DDRC,Copy_PIN) : CLR_BIT(DDRC,Copy_PIN);
+        if(Copy_Direction==DIO_PIN_INPUT)
+        {
+            CLR_BIT(PORTC,Copy_PIN);
+        }
         break;
 
     case DIO_PORTD:
         Copy_Direction==DIO_PIN_OUTPUT ? SET_BIT(DDRD,Copy_PIN) : CLR_BIT(DDRD,Copy_PIN);
+        if(Copy_Direction==DIO_PIN_INPUT)
+        {
+            CLR_BIT(PORTD,Copy_PIN);
+        }
         break;
     }
 
@@ -155,6 +181,44 @@ DIO_Error_Status     DIO_enum_TogglePinValue     (uint8_t Copy_PORT,uint8_t Copy
     return Check_Status;
 }
 
+DIO_Error_Status     DIO_enum_PullUpPin          (uint8_t Copy_PORT,uint16_t Copy_PIN)
+{
+    DIO_Error_Status Check_Status=DIO_OK;
+    // Important for Validation
+    if( Copy_PORT<DIO_PORTA || Copy_PORT>DIO_PORTD || Copy_PIN<0 || Copy_PIN>7)
+    {
+        Check_Status=DIO_NOK;
+    }
+    else
+    {
+        CLR_BIT(SFIOR,2);
+        switch (Copy_PORT)
+        {
+        case DIO_PORTA:
+                CLR_BIT(DDRA,Copy_PIN);
+                SET_BIT(PORTA,Copy_PIN);
+            break;
+        
+        case DIO_PORTB:
+                CLR_BIT(DDRB,Copy_PIN);
+                SET_BIT(PORTB,Copy_PIN);
+            break;
+
+        case DIO_PORTC:
+                CLR_BIT(DDRC,Copy_PIN);
+                SET_BIT(PORTC,Copy_PIN);
+            break;
+
+        case DIO_PORTD:
+                CLR_BIT(DDRD,Copy_PIN);
+                SET_BIT(PORTD,Copy_PIN);
+            break;
+        }
+    }
+    
+    return Check_Status;
+}
+
 // ---------------------- Functions for the Port ----------------------
 
 DIO_Error_Status     DIO_enum_SetPortDirection   (uint8_t Copy_PORT,uint8_t Copy_Direction)
@@ -170,19 +234,35 @@ DIO_Error_Status     DIO_enum_SetPortDirection   (uint8_t Copy_PORT,uint8_t Copy
     switch (Copy_PORT)
     {
     case DIO_PORTA:
-        DDRA = (Copy_Direction==DIO_PIN_INPUT ? DIO_PORT_INPUT : DIO_PORT_OUTPUT );
+        DDRA = (Copy_Direction==DIO_PORT_INPUT ? DIO_Set_PORT_INPUT : DIO_Set_PORT_OUTPUT  );
+        if(Copy_Direction==DIO_PORT_INPUT)
+        {
+            PORTA=0x00;
+        }
         break;
 
     case DIO_PORTB:
-        DDRB = (Copy_Direction==DIO_PIN_INPUT ? DIO_PORT_INPUT : DIO_PORT_OUTPUT );
+        DDRB = (Copy_Direction==DIO_PORT_INPUT ? DIO_Set_PORT_INPUT : DIO_Set_PORT_OUTPUT  );
+        if(Copy_Direction==DIO_PORT_INPUT)
+        {
+            PORTB=0x00;
+        }
         break;
 
     case DIO_PORTC:
-        DDRC = (Copy_Direction==DIO_PIN_INPUT ? DIO_PORT_INPUT : DIO_PORT_OUTPUT );
+        DDRC = (Copy_Direction==DIO_PORT_INPUT ? DIO_Set_PORT_INPUT : DIO_Set_PORT_OUTPUT  );
+        if(Copy_Direction==DIO_PORT_INPUT)
+        {
+            PORTC=0x00;
+        }
         break;
 
     case DIO_PORTD:
-        DDRD = (Copy_Direction==DIO_PIN_INPUT ? DIO_PORT_INPUT : DIO_PORT_OUTPUT );
+        DDRD = (Copy_Direction==DIO_PORT_INPUT ? DIO_Set_PORT_INPUT : DIO_Set_PORT_OUTPUT  );
+        if(Copy_Direction==DIO_PORT_INPUT)
+        {
+            PORTD=0x00;
+        }
         break;
     }
     }
@@ -288,6 +368,45 @@ DIO_Error_Status     DIO_enum_TogglePortValue    (uint8_t Copy_PORT)
     
 }
 
+DIO_Error_Status     DIO_enum_PullUpPort         (uint8_t Copy_PORT)
+{
+    DIO_Error_Status Check_Status=DIO_OK;
+    // Important for Validation
+    if( Copy_PORT<DIO_PORTA || Copy_PORT>DIO_PORTD)
+    {
+        Check_Status=DIO_NOK;
+    }
+    else
+    {
+        CLR_BIT(SFIOR,2);
+        switch (Copy_PORT)
+        {
+        case DIO_PORTA:
+                DDRA=0x00;
+                PORTA=0xff;
+            break;
+        
+        case DIO_PORTB:
+                DDRB=0x00;
+                PORTB=0xff;
+            break;
+
+        case DIO_PORTC:
+                DDRC=0x00;
+                PORTC=0xff;
+            break;
+
+        case DIO_PORTD:
+                DDRD=0x00;
+                PORTD=0xff;
+            break;
+        }
+    }
+    
+    return Check_Status;
+}
+
+
 // ---------------------- Functions for the Low Nibble in the Port ----------------------
 
 DIO_Error_Status     DIO_enum_Set_LowNibble_PortDirection   (uint8_t Copy_PORT,uint8_t Copy_Direction)
@@ -304,18 +423,34 @@ DIO_Error_Status     DIO_enum_Set_LowNibble_PortDirection   (uint8_t Copy_PORT,u
         {
             case DIO_PORTA:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTA&=0xf0):/*OUTPUT Process*/(PORTA|=0x0f);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTA&=0xf0;
+            }
             break;
 
             case DIO_PORTB:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTB&=0xf0):/*OUTPUT Process*/(PORTB|=0x0f);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTB&=0xf0;
+            }
             break;
 
             case DIO_PORTC:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTC&=0xf0):/*OUTPUT Process*/(PORTC|=0x0f);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTC&=0xf0;
+            }
             break;
 
             case DIO_PORTD:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTD&=0xf0):/*OUTPUT Process*/(PORTD|=0x0f);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTD&=0xf0;
+            }
             break;
         }
     }
@@ -426,6 +561,44 @@ DIO_Error_Status     DIO_enum_Toggle_LowNibble_PortValue    (uint8_t Copy_PORT)
     return Check_Status;
 }
 
+DIO_Error_Status     DIO_enum_PullUp_LowNibble              (uint8_t Copy_PORT)
+{
+    DIO_Error_Status Check_Status=DIO_OK;
+    // Important for Validation
+    if( Copy_PORT<DIO_PORTA || Copy_PORT>DIO_PORTD)
+    {
+        Check_Status=DIO_NOK;
+    }
+    else
+    {
+        CLR_BIT(SFIOR,2);
+        switch (Copy_PORT)
+        {
+        case DIO_PORTA:
+                DDRA&=0xf0;
+                PORTA|=0x0f;
+            break;
+        
+        case DIO_PORTB:
+                DDRB&=0xf0;
+                PORTB|=0x0f;
+            break;
+
+        case DIO_PORTC:
+                DDRC&=0xf0;
+                PORTC|=0x0f;
+            break;
+
+        case DIO_PORTD:
+                DDRD&=0xf0;
+                PORTD|=0x0f;
+            break;
+        }
+    }
+    
+    return Check_Status;
+}
+
 
 // ---------------------- Functions for the High Nibble in the Port ----------------------
 DIO_Error_Status     DIO_enum_Set_HighNibble_PortDirection   (uint8_t Copy_PORT,uint8_t Copy_Direction)
@@ -442,18 +615,34 @@ DIO_Error_Status     DIO_enum_Set_HighNibble_PortDirection   (uint8_t Copy_PORT,
         {
             case DIO_PORTA:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTA&=0x0f):/*OUTPUT Process*/(PORTA|=0xf0);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTA&=0x0f;
+            }
             break;
 
             case DIO_PORTB:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTB&=0x0f):/*OUTPUT Process*/(PORTB|=0xf0);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTB&=0x0f;
+            }
             break;
 
             case DIO_PORTC:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTC&=0x0f):/*OUTPUT Process*/(PORTC|=0xf0);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTC&=0x0f;
+            }
             break;
 
             case DIO_PORTD:
             Copy_Direction==DIO_PORT_INPUT?/*INPUT Process*/(PORTD&=0x0f):/*OUTPUT Process*/(PORTD|=0xf0);
+            if(Copy_Direction==DIO_PORT_INPUT)
+            {
+                PORTD&=0x0f;
+            }
             break;
         }
     }
@@ -560,5 +749,43 @@ DIO_Error_Status     DIO_enum_Toggle_HighNibble_PortValue    (uint8_t Copy_PORT)
             break;
         }
     }
+    return Check_Status;
+}
+
+DIO_Error_Status     DIO_enum_PullUp_HighNibble              (uint8_t Copy_PORT)
+{
+    DIO_Error_Status Check_Status=DIO_OK;
+    // Important for Validation
+    if( Copy_PORT<DIO_PORTA || Copy_PORT>DIO_PORTD)
+    {
+        Check_Status=DIO_NOK;
+    }
+    else
+    {
+        CLR_BIT(SFIOR,2);
+        switch (Copy_PORT)
+        {
+        case DIO_PORTA:
+                DDRA&=0x0f;
+                PORTA|=0xf0;
+            break;
+        
+        case DIO_PORTB:
+                DDRB&=0x0f;
+                PORTB|=0xf0;
+            break;
+
+        case DIO_PORTC:
+                DDRC&=0x0f;
+                PORTC|=0xf0;
+            break;
+
+        case DIO_PORTD:
+                DDRD&=0x0f;
+                PORTD|=0xf0;
+            break;
+        }
+    }
+    
     return Check_Status;
 }

@@ -32,7 +32,12 @@
 #define DDRD  (*(vuint8_t*)((vuint8_t*)0x31))
 #define PIND  (*(vuint8_t*)((vuint8_t*)0x30))
 
+// SFIOR Register
+#define SFIOR (*(vuint8_t*)((vuint8_t*)0x50))
 
+// PORT Value Options
+#define DIO_Set_PORT_INPUT ((uint8_t)0x00)
+#define DIO_Set_PORT_OUTPUT  ((uint8_t)0xff)
 
 
 
