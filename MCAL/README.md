@@ -16,3 +16,5 @@ I wrote many funcitons for this driver:
 3- You can get the value.
 
 4- You can toggle the value.
+
+5- You can enable or disable PullUp.
