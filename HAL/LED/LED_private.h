@@ -8,7 +8,7 @@
 #ifndef _LED_PRIVATE_H_
 #define _LED_PRIVATE_H_
 
-#include "My_Platform_Types.h"
+#include "../../LIB/My_Platform_Types.h"
 
 
 #endif

@@ -6,8 +6,8 @@
                 SWC   : DIO/GPIO
 */
 
-#include "My_Platform_Types.h"
-#include "My_Bit_Cal.h"
+#include "../../LIB/My_Platform_Types.h"
+#include "../../LIB/My_Bit_Cal.h"
 
 #include "DIO_config.h"
 #include "DIO_interface.h"
@@ -18,7 +18,7 @@ DIO_Error_Status     DIO_enum_EnablePullUp       ()
 {
     CLR_BIT(SFIOR,2);
 }
-DIO_Error_Status     DIO_enum_DisablePullUP      ()
+DIO_Error_Status     DIO_enum_DisablePullUp      ()
 {
     SET_BIT(SFIOR,2);
 }
@@ -181,7 +181,7 @@ DIO_Error_Status     DIO_enum_TogglePinValue     (uint8_t Copy_PORT,uint8_t Copy
     return Check_Status;
 }
 
-DIO_Error_Status     DIO_enum_PullUpPin          (uint8_t Copy_PORT,uint16_t Copy_PIN)
+DIO_Error_Status     DIO_enum_PullUpPin          (uint8_t Copy_PORT,uint8_t Copy_PIN)
 {
     DIO_Error_Status Check_Status=DIO_OK;
     // Important for Validation

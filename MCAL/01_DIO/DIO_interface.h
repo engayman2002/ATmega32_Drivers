@@ -5,7 +5,7 @@
                 Layer : MCAL
                 SWC   : DIO/GPIO
 */
-#include "My_Platform_Types.h"
+#include "../../LIB/My_Platform_Types.h"
 
 #ifndef _DIO_INTERFACE_H_
 #define _DIO_INTERFACE_H_
@@ -45,7 +45,7 @@ typedef enum{
 
 // Enable and Disable PullUp
 extern DIO_Error_Status     DIO_enum_EnablePullUp       ();
-extern DIO_Error_Status     DIO_enum_DisablePullUP      ();
+extern DIO_Error_Status     DIO_enum_DisablePullUp      ();
 
 
 // Functions for Specific Bit in Port
@@ -53,7 +53,7 @@ extern DIO_Error_Status     DIO_enum_SetPinDirection    (uint8_t Copy_PORT,uint8
 extern DIO_Error_Status     DIO_enum_SetPinValue        (uint8_t Copy_PORT,uint8_t Copy_PIN,uint8_t Copy_Value);
 extern DIO_Error_Status     DIO_enum_GetPinValue        (uint8_t Copy_PORT,uint8_t Copy_PIN,uint8_t *Copy_PtrData);
 extern DIO_Error_Status     DIO_enum_TogglePinValue     (uint8_t Copy_PORT,uint8_t Copy_PIN);
-extern DIO_Error_Status     DIO_enum_PullUpPin          (uint8_t Copy_PORT,uint16_t Copy_PIN);
+extern DIO_Error_Status     DIO_enum_PullUpPin          (uint8_t Copy_PORT,uint8_t Copy_PIN);
 
 // Functions for the Port
 extern DIO_Error_Status     DIO_enum_SetPortDirection   (uint8_t Copy_PORT,uint8_t Copy_Direction); // In Input Status it disables pull up for the port.

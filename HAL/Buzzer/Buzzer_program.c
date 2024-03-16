@@ -6,8 +6,9 @@
                 SWC   : LED
 */
 
-#include "My_Platform_Types.h"
-#include "My_Bit_Cal.h"
+#include "../../LIB/My_Platform_Types.h"
+#include "../../LIB/My_Bit_Cal.h"
+
 
 #include "../../MCAL/01_DIO/DIO_interface.h"
 

@@ -5,7 +5,7 @@
                 Layer : MCAL
                 SWC   : DIO/GPIO
 */
-#include "My_Platform_Types.h"
+#include "../../LIB/My_Platform_Types.h"
 
 #ifndef _DIO_PRIVATE_H_
 #define _DIO_PRIVATE_H_

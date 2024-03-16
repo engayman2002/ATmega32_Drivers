@@ -5,7 +5,7 @@
                 Layer : HAL
                 SWC   : LED
 */
-#include "My_Platform_Types.h"
+#include "../../LIB/My_Platform_Types.h"
 
 #ifndef _Buzzer_INTERFACE_H_
 #define _Buzzer_INTERFACE_H_
